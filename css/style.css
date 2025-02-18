@@ -1,13 +1,5 @@
-/******************************************************************
-  Template Name: Gym
-  Description:  Gym Fitness HTML Template
-  Author: Colorlib
-  Author URI: https://colorlib.com
-  Version: 1.0
-  Created: Colorlib
-******************************************************************/
 
-/*------------------------------------------------------------------
+/*
 [Table of contents]
 
 1.  Template default CSS
@@ -1140,7 +1132,7 @@ ol {
 }
 
 .fs-about .fa-logo {
-	margin-bottom: 30px;
+	margin-bottom: 40px;
 }
 
 .fs-about .fa-logo a {
