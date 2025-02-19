@@ -3301,7 +3301,7 @@ ol {
     }
 
     .box {
-        width: 70%; /* Adjusts width for smaller screens */
+        width: 90%; /* Adjusts width for smaller screens */
         min-height: auto; /* Allows height to adjust based on content */
     }
 
