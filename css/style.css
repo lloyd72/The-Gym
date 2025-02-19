@@ -3279,7 +3279,7 @@ ol {
     color: #71C946;
     font-size: 34px;
     position: absolute;
-    top: -25px;
+    top: -22px;
     left: 50%;
     transform: translateX(-50%);
     background-color: ;
@@ -3297,7 +3297,7 @@ ol {
     .myth-fact-container {
         flex-direction: column;
         align-items: center;
-        gap: 60px; /* Adds space between stacked boxes */
+        gap: 40px; /* Adds space between stacked boxes */
     }
 
     .box {
@@ -3315,6 +3315,9 @@ ol {
 		background-color: ;
 	  font-style: italic;
 		padding: 0 10px;
+	}
+	.box p {
+		margin-top: 30px;
 	}
 }
 
