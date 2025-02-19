@@ -3279,7 +3279,7 @@ ol {
     color: #71C946;
     font-size: 34px;
     position: absolute;
-    top: -18px;
+    top: -8px;
     left: 50%;
     transform: translateX(-50%);
     background-color: ;
@@ -3301,7 +3301,20 @@ ol {
     }
 
     .box {
-        width: 90%; /* Adjusts width for smaller screens */
+        width: 80%; /* Adjusts width for smaller screens */
         min-height: auto; /* Allows height to adjust based on content */
     }
+
+	.box-title {
+		color: #71C946;
+		font-size: 34px;
+		position: absolute;
+		top: -18px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: ;
+	  font-style: italic;
+		padding: 0 10px;
+	}
 }
+
