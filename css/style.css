@@ -3319,5 +3319,8 @@ ol {
 	.box p {
 		margin-top: 20px;
 	}
+	.myth-box .box-content {
+        padding-top: 20px; /* Adds some padding to prevent overlap with the title */
+    }
 }
 
