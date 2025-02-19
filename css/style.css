@@ -3260,7 +3260,7 @@ ol {
 
 /* Common Styles for Myth and Fact Boxes */
 .box {
-    background-color:  black;
+    background-color:  #0a0a0a;
     padding: 20px;
     width: 300px; /* Increased width for more space */
     min-height: 250px; /* Increased height to accommodate more text */
@@ -3320,7 +3320,7 @@ ol {
 	.box p {
 		margin-top: 20px;
 	}
-	
+
 	.myth-box .box-content {
         padding-top: 20px; /* Adds some padding to prevent overlap with the title */
     }
