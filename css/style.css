@@ -3260,7 +3260,7 @@ ol {
 
 /* Common Styles for Myth and Fact Boxes */
 .box {
-    background-color:  black;
+    background-color:  #363636;
     padding: 20px;
     width: 300px; /* Increased width for more space */
     min-height: 250px; /* Increased height to accommodate more text */
@@ -3279,7 +3279,7 @@ ol {
     color: #71C946;
     font-size: 34px;
     position: absolute;
-    top: -22px;
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
     background-color: ;
@@ -3317,7 +3317,7 @@ ol {
 		padding: 0 10px;
 	}
 	.box p {
-		margin-top: 30px;
+		margin-top: 20px;
 	}
 }
 
