@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - The Muscle Studio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .members-table {
+            width: 100%;
+            background: #0a0a0a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .members-table th,
+        .members-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #363636;
+        }
+
+        .members-table th {
+            background: #151515;
+            color: #71C946;
+        }
+
+        .status-active {
+            color: #71C946;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .activate-btn {
+            background: #71C946;
+            color: white;
+        }
+
+        .deactivate-btn {
+            background: #ff4444;
+            color: white;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            background: #151515;
+            border: 1px solid #363636;
+            border-radius: 5px;
+            color: white;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Membership Management</h1>
+        
+        <input type="text" class="search-bar" id="memberSearch" placeholder="Search members...">
+        
+        <table class="members-table">
+            <thead>
+                <tr>
+                    <th>Member Name</th>
+                    <th>Email</th>
+                    <th>Membership Type</th>
+                    <th>Status</th>
+                    <th>Last Payment</th>
+                    <th>Next Payment</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="membersTableBody">
+                <!-- Members will be loaded here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            // Your Firebase config
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Load members
+        async function loadMembers() {
+            const membersRef = db.collection('users');
+            const snapshot = await membersRef.get();
+            const tableBody = document.getElementById('membersTableBody');
+            tableBody.innerHTML = '';
+
+            snapshot.forEach(doc => {
+                const member = doc.data();
+                const row = `
+                    <tr>
+                        <td>${member.name}</td>
+                        <td>${member.email}</td>
+                        <td>${member.membershipType || 'Basic'}</td>
+                        <td class="status-${member.isActive ? 'active' : 'inactive'}">
+                            ${member.isActive ? 'Active' : 'Inactive'}
+                        </td>
+                        <td>${member.lastPayment ? new Date(member.lastPayment.toDate()).toLocaleDateString() : 'N/A'}</td>
+                        <td>${member.nextPayment ? new Date(member.nextPayment.toDate()).toLocaleDateString() : 'N/A'}</td>
+                        <td>
+                            ${member.isActive ? 
+                                `<button class="action-btn deactivate-btn" onclick="updateMemberStatus('${doc.id}', false)">Deactivate</button>` :
+                                `<button class="action-btn activate-btn" onclick="updateMemberStatus('${doc.id}', true)">Activate</button>`
+                            }
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Update member status
+        async function updateMemberStatus(userId, isActive) {
+            try {
+                await db.collection('users').doc(userId).update({
+                    isActive: isActive,
+                    lastPayment: isActive ? new Date() : null,
+                    nextPayment: isActive ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null // 30 days from now
+                });
+                loadMembers(); // Reload the table
+            } catch (error) {
+                console.error('Error updating member status:', error);
+                alert('Error updating member status');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('memberSearch').addEventListener('input', function(e) {
+            const searchText = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#membersTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+
+        // Load members when page loads
+        document.addEventListener('DOMContentLoaded', loadMembers);
+
+        // Check admin status
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user || !user.email.endsWith('@admin.com')) { // Simple admin check
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html> 

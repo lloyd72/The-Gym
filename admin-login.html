@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - The Muscle Studio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-login-section {
+            background: #151515;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .admin-login-container {
+            background: #0a0a0a;
+            border-radius: 10px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #363636;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-header h2 {
+            color: #ffffff;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: #151515;
+            border: 1px solid #363636;
+            border-radius: 5px;
+            color: #ffffff;
+        }
+
+        .admin-login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #71C946;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .admin-login-btn:hover {
+            background: #5ba338;
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <section class="admin-login-section">
+        <div class="admin-login-container">
+            <div class="admin-header">
+                <h2>Admin Login</h2>
+            </div>
+
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+
+                <button type="submit" class="admin-login-btn">Login</button>
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+        </div>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8HwlXcTf5iWOSmTDqUAvjrbLjZWXrCPA",
+            authDomain: "loginapp-8d0ac.firebaseapp.com",
+            projectId: "loginapp-8d0ac",
+            storageBucket: "loginapp-8d0ac.firebasestorage.app",
+            messagingSenderId: "81023835707",
+            appId: "1:81023835707:web:e71e35329a3f8bbdc7861e",
+            measurementId: "G-T3GBTYMG95"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Check if user is an admin
+                const userDoc = await firebase.firestore().collection('admins').doc(user.uid).get();
+                
+                if (userDoc.exists && userDoc.data().isAdmin) {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    await firebase.auth().signOut();
+                    errorMessage.textContent = 'Access denied. Admin privileges required.';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // Check if already logged in as admin
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                const userDoc = await firebase.firestore().collection('admins').doc(user.uid).get();
+                if (userDoc.exists && userDoc.data().isAdmin) {
+                    window.location.href = 'admin-dashboard.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
