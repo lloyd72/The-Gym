@@ -139,24 +139,17 @@
         // Load members
         async function loadMembers() {
             try {
-                console.log('Starting to load members...');
                 const membersRef = firebase.firestore().collection('users');
                 const snapshot = await membersRef.get();
                 
-                console.log('Number of members found:', snapshot.size); // Debug log
+                console.log('Found members:', snapshot.size);
                 
                 const tableBody = document.getElementById('membersTableBody');
                 tableBody.innerHTML = '';
 
-                if (snapshot.empty) {
-                    console.log('No members found');
-                    tableBody.innerHTML = '<tr><td colspan="7">No members found</td></tr>';
-                    return;
-                }
-
                 snapshot.forEach(doc => {
                     const member = doc.data();
-                    console.log('Member data:', member); // Debug log
+                    console.log('Member:', member);
                     
                     const row = `
                         <tr>
@@ -180,7 +173,6 @@
                 });
             } catch (error) {
                 console.error('Error loading members:', error);
-                alert('Error loading members. Please check console for details.');
             }
         }
 
@@ -211,7 +203,10 @@
         });
 
         // Load members when page loads
-        document.addEventListener('DOMContentLoaded', loadMembers);
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Loading members...');
+            loadMembers();
+        });
     </script>
 </body>
 </html> 

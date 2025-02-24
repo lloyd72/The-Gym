@@ -452,9 +452,11 @@
             const phone = document.getElementById('signupPhone').value;
             const password = document.getElementById('signupPassword').value;
 
+            console.log('Creating user:', { name, email, phone }); // Debug log
+
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Update profile with name
+                    console.log('User created:', userCredential.user.uid); // Debug log
                     return userCredential.user.updateProfile({
                         displayName: name
                     });
@@ -474,7 +476,7 @@
                     });
                 })
                 .then(() => {
-                    // Show success message and redirect
+                    console.log('User data saved to Firestore'); // Debug log
                     const successMessage = document.getElementById('successMessage');
                     successMessage.textContent = 'Account created successfully!';
                     successMessage.style.display = 'block';
@@ -483,6 +485,7 @@
                     }, 2000);
                 })
                 .catch((error) => {
+                    console.error('Signup error:', error); // Debug log
                     const errorMessage = document.getElementById('errorMessage');
                     errorMessage.textContent = error.message;
                     errorMessage.style.display = 'block';
