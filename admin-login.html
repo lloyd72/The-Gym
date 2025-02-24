@@ -131,14 +131,18 @@
                 
                 // First try to login
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-                console.log('Login successful, checking admin status...');
-                console.log('Your UID:', userCredential.user.uid);
+                const uid = userCredential.user.uid;
+                console.log('Login successful, UID:', uid);
                 
                 // Check admin status
                 const adminDoc = await firebase.firestore()
                     .collection('admins')
-                    .doc(userCredential.user.uid)
+                    .doc(uid)
                     .get();
+
+                console.log('Admin doc exists:', adminDoc.exists);
+                console.log('Admin doc data:', adminDoc.data());
+                console.log('isAdmin value:', adminDoc.data()?.isAdmin);
 
                 if (adminDoc.exists && adminDoc.data().isAdmin === true) {
                     console.log('Admin verified, redirecting...');
@@ -150,17 +154,8 @@
                     errorMessage.style.display = 'block';
                 }
             } catch (error) {
-                console.error('Error details:', error);
-                // Show specific error messages
-                if (error.code === 'auth/wrong-password') {
-                    errorMessage.textContent = 'Incorrect password';
-                } else if (error.code === 'auth/user-not-found') {
-                    errorMessage.textContent = 'Email not found';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage.textContent = 'Invalid email format';
-                } else {
-                    errorMessage.textContent = error.message;
-                }
+                console.error('Full error:', error);
+                errorMessage.textContent = error.message;
                 errorMessage.style.display = 'block';
             }
         });
