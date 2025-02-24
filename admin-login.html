@@ -127,22 +127,30 @@
             const errorMessage = document.getElementById('errorMessage');
 
             try {
-                // First check if user can authenticate
+                // Clear previous errors
+                errorMessage.style.display = 'none';
+                
+                // Sign in
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
                 
-                // Then check if they're an admin
-                const userDoc = await firebase.firestore().collection('admins')
-                    .doc(userCredential.user.uid).get();
+                // Check admin collection
+                const adminDoc = await firebase.firestore()
+                    .collection('admins')
+                    .doc(userCredential.user.uid)
+                    .get();
 
-                if (userDoc.exists) {
-                    window.location.href = 'admin-dashboard.html';
+                if (adminDoc.exists) {
+                    // Success - redirect to admin dashboard
+                    window.location.replace('admin-dashboard.html');
                 } else {
+                    // Not an admin
                     await firebase.auth().signOut();
                     errorMessage.textContent = 'Not authorized as admin';
                     errorMessage.style.display = 'block';
                 }
             } catch (error) {
-                errorMessage.textContent = 'Invalid email or password';
+                console.error('Admin login error:', error);
+                errorMessage.textContent = 'Login failed. Please check your credentials.';
                 errorMessage.style.display = 'block';
             }
         });
