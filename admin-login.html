@@ -127,21 +127,22 @@
             const errorMessage = document.getElementById('errorMessage');
 
             try {
+                // First check if user can authenticate
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Check if user is an admin
-                const userDoc = await firebase.firestore().collection('admins').doc(user.uid).get();
                 
-                if (userDoc.exists && userDoc.data().isAdmin) {
+                // Then check if they're an admin
+                const userDoc = await firebase.firestore().collection('admins')
+                    .doc(userCredential.user.uid).get();
+
+                if (userDoc.exists) {
                     window.location.href = 'admin-dashboard.html';
                 } else {
                     await firebase.auth().signOut();
-                    errorMessage.textContent = 'Access denied. Admin privileges required.';
+                    errorMessage.textContent = 'Not authorized as admin';
                     errorMessage.style.display = 'block';
                 }
             } catch (error) {
-                errorMessage.textContent = error.message;
+                errorMessage.textContent = 'Invalid email or password';
                 errorMessage.style.display = 'block';
             }
         });
