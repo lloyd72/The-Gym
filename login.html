@@ -408,11 +408,16 @@
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
 
+            // Clear previous error
+            errorMessage.style.display = 'none';
+
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    window.location.href = 'dashboard.html';
+                    // Redirect using replace to prevent back button issues
+                    window.location.replace('dashboard.html');
                 })
                 .catch((error) => {
+                    console.error('Login error:', error);
                     errorMessage.textContent = 'Invalid email or password. Please try again.';
                     errorMessage.style.display = 'block';
                 });
