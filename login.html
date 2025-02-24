@@ -320,7 +320,7 @@
                 <p>Login to access your dashboard</p>
             </div>
 
-            <form id="loginForm">
+            <form id="loginForm" onsubmit="return false;">
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" id="email" name="email" required>
@@ -351,7 +351,7 @@
                     <h2>Create Account</h2>
                     <p>Join our fitness community</p>
                 </div>
-                <form id="signupForm">
+                <form id="signupForm" onsubmit="return false;">
                     <div class="form-group">
                         <label for="signupName">Full Name</label>
                         <input type="text" id="signupName" name="name" required>
@@ -381,8 +381,9 @@
     </section>
 
     <!-- Add Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
         // Firebase configuration
