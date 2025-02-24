@@ -104,16 +104,41 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-            // Your Firebase config
+            apiKey: "AIzaSyC8HwlXcTf5iWOSmTDqUAvjrbLjZWXrCPA",
+            authDomain: "loginapp-8d0ac.firebaseapp.com",
+            projectId: "loginapp-8d0ac",
+            storageBucket: "loginapp-8d0ac.firebasestorage.app",
+            messagingSenderId: "81023835707",
+            appId: "1:81023835707:web:e71e35329a3f8bbdc7861e",
+            measurementId: "G-T3GBTYMG95"
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+
+        // Check admin authentication
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (!user) {
+                // Not logged in, redirect to admin login
+                window.location.replace('admin-login.html');
+            } else {
+                // Verify admin status
+                const adminDoc = await firebase.firestore()
+                    .collection('admins')
+                    .doc(user.uid)
+                    .get();
+
+                if (!adminDoc.exists || !adminDoc.data().isAdmin) {
+                    // Not an admin, redirect to login
+                    await firebase.auth().signOut();
+                    window.location.replace('admin-login.html');
+                }
+            }
+        });
 
         // Load members
         async function loadMembers() {
-            const membersRef = db.collection('users');
+            const membersRef = firebase.firestore().collection('users');
             const snapshot = await membersRef.get();
             const tableBody = document.getElementById('membersTableBody');
             tableBody.innerHTML = '';
@@ -145,7 +170,7 @@
         // Update member status
         async function updateMemberStatus(userId, isActive) {
             try {
-                await db.collection('users').doc(userId).update({
+                await firebase.firestore().collection('users').doc(userId).update({
                     isActive: isActive,
                     lastPayment: isActive ? new Date() : null,
                     nextPayment: isActive ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null // 30 days from now
@@ -170,13 +195,6 @@
 
         // Load members when page loads
         document.addEventListener('DOMContentLoaded', loadMembers);
-
-        // Check admin status
-        firebase.auth().onAuthStateChanged((user) => {
-            if (!user || !user.email.endsWith('@admin.com')) { // Simple admin check
-                window.location.href = 'login.html';
-            }
-        });
     </script>
 </body>
 </html> 

@@ -452,7 +452,6 @@
             const phone = document.getElementById('signupPhone').value;
             const password = document.getElementById('signupPassword').value;
 
-            // Create user with email and password
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     // Update profile with name
@@ -461,31 +460,31 @@
                     });
                 })
                 .then(() => {
-                    // Store additional user data in Firestore
                     const user = firebase.auth().currentUser;
+                    // Save user data to Firestore
                     return firebase.firestore().collection('users').doc(user.uid).set({
                         name: name,
                         email: email,
                         phone: phone,
+                        membershipType: 'Basic',
+                        isActive: false,
                         createdAt: new Date(),
-                        isActive: false // Set initial membership status
+                        lastPayment: null,
+                        nextPayment: null
                     });
                 })
                 .then(() => {
-                    // Show success message
+                    // Show success message and redirect
                     const successMessage = document.getElementById('successMessage');
-                    successMessage.textContent = 'Account created successfully! Redirecting to dashboard...';
+                    successMessage.textContent = 'Account created successfully!';
                     successMessage.style.display = 'block';
-                    
-                    // Redirect after 2 seconds
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 2000);
                 })
                 .catch((error) => {
-                    // Show error message
                     const errorMessage = document.getElementById('errorMessage');
-                    errorMessage.textContent = 'Error: ' + error.message;
+                    errorMessage.textContent = error.message;
                     errorMessage.style.display = 'block';
                 });
         });
