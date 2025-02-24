@@ -288,6 +288,26 @@
                 padding: 12px;
             }
         }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(113, 201, 70, 0.2);
+            color: #71C946;
+            border: 1px solid #71C946;
+        }
+
+        .error-message {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
     </style>
 </head>
 <body>
@@ -308,14 +328,7 @@
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required 
-                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
-                    <div class="password-strength">
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                    </div>
-                    <span class="error-message">Password must be at least 8 characters with letters and numbers</span>
+                    <input type="password" id="password" name="password" required>
                 </div>
 
                 <div class="remember-forgot">
@@ -361,6 +374,9 @@
                     Already have an account? <a href="#" onclick="toggleForms('login')">Login</a>
                 </div>
             </div>
+
+            <div id="successMessage" class="message success-message"></div>
+            <div id="errorMessage" class="message error-message"></div>
         </div>
     </section>
 
@@ -389,17 +405,15 @@
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
 
-            // Sign in with Firebase
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Successfully logged in
                     window.location.href = 'dashboard.html';
                 })
                 .catch((error) => {
-                    // Handle errors
-                    console.error('Error:', error);
-                    alert('Login failed: ' + error.message);
+                    errorMessage.textContent = 'Invalid email or password. Please try again.';
+                    errorMessage.style.display = 'block';
                 });
         });
 
@@ -447,15 +461,26 @@
                         name: name,
                         email: email,
                         phone: phone,
-                        createdAt: new Date()
+                        createdAt: new Date(),
+                        isActive: false // Set initial membership status
                     });
                 })
                 .then(() => {
-                    window.location.href = 'dashboard.html';
+                    // Show success message
+                    const successMessage = document.getElementById('successMessage');
+                    successMessage.textContent = 'Account created successfully! Redirecting to dashboard...';
+                    successMessage.style.display = 'block';
+                    
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
-                    alert('Signup failed: ' + error.message);
+                    // Show error message
+                    const errorMessage = document.getElementById('errorMessage');
+                    errorMessage.textContent = 'Error: ' + error.message;
+                    errorMessage.style.display = 'block';
                 });
         });
 
