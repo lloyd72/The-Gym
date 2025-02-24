@@ -127,30 +127,39 @@
             const errorMessage = document.getElementById('errorMessage');
 
             try {
-                // Clear previous errors
                 errorMessage.style.display = 'none';
                 
-                // Sign in
+                // First try to login
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                console.log('Login successful, checking admin status...');
                 
-                // Check admin collection
+                // Check admin status
                 const adminDoc = await firebase.firestore()
                     .collection('admins')
                     .doc(userCredential.user.uid)
                     .get();
 
-                if (adminDoc.exists) {
-                    // Success - redirect to admin dashboard
+                if (adminDoc.exists && adminDoc.data().isAdmin === true) {
+                    console.log('Admin verified, redirecting...');
                     window.location.replace('admin-dashboard.html');
                 } else {
-                    // Not an admin
+                    console.log('Not an admin, logging out...');
                     await firebase.auth().signOut();
-                    errorMessage.textContent = 'Not authorized as admin';
+                    errorMessage.textContent = 'This account does not have admin privileges';
                     errorMessage.style.display = 'block';
                 }
             } catch (error) {
-                console.error('Admin login error:', error);
-                errorMessage.textContent = 'Login failed. Please check your credentials.';
+                console.error('Error details:', error);
+                // Show specific error messages
+                if (error.code === 'auth/wrong-password') {
+                    errorMessage.textContent = 'Incorrect password';
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMessage.textContent = 'Email not found';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage.textContent = 'Invalid email format';
+                } else {
+                    errorMessage.textContent = error.message;
+                }
                 errorMessage.style.display = 'block';
             }
         });
