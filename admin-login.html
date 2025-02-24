@@ -132,6 +132,7 @@
                 // First try to login
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
                 console.log('Login successful, checking admin status...');
+                console.log('Your UID:', userCredential.user.uid);
                 
                 // Check admin status
                 const adminDoc = await firebase.firestore()
