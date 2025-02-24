@@ -138,33 +138,50 @@
 
         // Load members
         async function loadMembers() {
-            const membersRef = firebase.firestore().collection('users');
-            const snapshot = await membersRef.get();
-            const tableBody = document.getElementById('membersTableBody');
-            tableBody.innerHTML = '';
+            try {
+                console.log('Starting to load members...');
+                const membersRef = firebase.firestore().collection('users');
+                const snapshot = await membersRef.get();
+                
+                console.log('Number of members found:', snapshot.size); // Debug log
+                
+                const tableBody = document.getElementById('membersTableBody');
+                tableBody.innerHTML = '';
 
-            snapshot.forEach(doc => {
-                const member = doc.data();
-                const row = `
-                    <tr>
-                        <td>${member.name}</td>
-                        <td>${member.email}</td>
-                        <td>${member.membershipType || 'Basic'}</td>
-                        <td class="status-${member.isActive ? 'active' : 'inactive'}">
-                            ${member.isActive ? 'Active' : 'Inactive'}
-                        </td>
-                        <td>${member.lastPayment ? new Date(member.lastPayment.toDate()).toLocaleDateString() : 'N/A'}</td>
-                        <td>${member.nextPayment ? new Date(member.nextPayment.toDate()).toLocaleDateString() : 'N/A'}</td>
-                        <td>
-                            ${member.isActive ? 
-                                `<button class="action-btn deactivate-btn" onclick="updateMemberStatus('${doc.id}', false)">Deactivate</button>` :
-                                `<button class="action-btn activate-btn" onclick="updateMemberStatus('${doc.id}', true)">Activate</button>`
-                            }
-                        </td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
+                if (snapshot.empty) {
+                    console.log('No members found');
+                    tableBody.innerHTML = '<tr><td colspan="7">No members found</td></tr>';
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const member = doc.data();
+                    console.log('Member data:', member); // Debug log
+                    
+                    const row = `
+                        <tr>
+                            <td>${member.name || 'N/A'}</td>
+                            <td>${member.email || 'N/A'}</td>
+                            <td>${member.membershipType || 'Basic'}</td>
+                            <td class="status-${member.isActive ? 'active' : 'inactive'}">
+                                ${member.isActive ? 'Active' : 'Inactive'}
+                            </td>
+                            <td>${member.lastPayment ? new Date(member.lastPayment.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+                            <td>${member.nextPayment ? new Date(member.nextPayment.seconds * 1000).toLocaleDateString() : 'N/A'}</td>
+                            <td>
+                                <button class="action-btn ${member.isActive ? 'deactivate-btn' : 'activate-btn'}" 
+                                    onclick="updateMemberStatus('${doc.id}', ${!member.isActive})">
+                                    ${member.isActive ? 'Deactivate' : 'Activate'}
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error loading members:', error);
+                alert('Error loading members. Please check console for details.');
+            }
         }
 
         // Update member status
