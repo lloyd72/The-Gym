@@ -119,18 +119,29 @@
         // Check admin authentication
         firebase.auth().onAuthStateChanged(async (user) => {
             if (!user) {
-                // Not logged in, redirect to admin login
+                console.log('No user logged in');
                 window.location.replace('admin-login.html');
             } else {
-                // Verify admin status
-                const adminDoc = await firebase.firestore()
-                    .collection('admins')
-                    .doc(user.uid)
-                    .get();
+                console.log('User logged in:', user.uid);
+                try {
+                    // Verify admin status
+                    const adminDoc = await firebase.firestore()
+                        .collection('admins')
+                        .doc(user.uid)
+                        .get();
 
-                if (!adminDoc.exists || !adminDoc.data().isAdmin) {
-                    // Not an admin, redirect to login
-                    await firebase.auth().signOut();
+                    console.log('Admin check:', adminDoc.exists, adminDoc.data());
+
+                    if (adminDoc.exists && adminDoc.data().isAdmin === true) {
+                        console.log('Admin verified, loading members...');
+                        loadMembers();
+                    } else {
+                        console.log('Not an admin, redirecting...');
+                        await firebase.auth().signOut();
+                        window.location.replace('admin-login.html');
+                    }
+                } catch (error) {
+                    console.error('Admin check error:', error);
                     window.location.replace('admin-login.html');
                 }
             }
@@ -209,11 +220,8 @@
             });
         });
 
-        // Load members when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Loading members...');
-            loadMembers();
-        });
+        // Remove the DOMContentLoaded event listener since we're loading members after admin verification
+        document.removeEventListener('DOMContentLoaded', loadMembers);
     </script>
 </body>
 </html> 
