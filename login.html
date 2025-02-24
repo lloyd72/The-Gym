@@ -387,18 +387,22 @@
 
     <script>
         // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyC8HwlXcTf5iWOSmTDqUAvjrbLjZWXrCPA",
-            authDomain: "loginapp-8d0ac.firebaseapp.com",
-            projectId: "loginapp-8d0ac",
-            storageBucket: "loginapp-8d0ac.firebasestorage.app",
-            messagingSenderId: "81023835707",
-            appId: "1:81023835707:web:e71e35329a3f8bbdc7861e",
-            measurementId: "G-T3GBTYMG95"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyC8HwlXcTf5iWOSmTDqUAvjrbLjZWXrCPA",
+    authDomain: "loginapp-8d0ac.firebaseapp.com",
+    projectId: "loginapp-8d0ac",
+    storageBucket: "loginapp-8d0ac.firebasestorage.app",
+    messagingSenderId: "81023835707",
+    appId: "1:81023835707:web:e71e35329a3f8bbdc7861e",
+    measurementId: "G-T3GBTYMG95"
+};
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const db = firebase.firestore();
+console.log('Firestore initialized:', db); // Debug log
 
         // Handle form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -455,7 +459,7 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            console.log('User created:', userCredential.user.uid); // Debug log
+            console.log('User created in Authentication:', userCredential.user.uid); // Debug log
 
             // Save user data to Firestore
             return firebase.firestore().collection('users').doc(userCredential.user.uid).set({
