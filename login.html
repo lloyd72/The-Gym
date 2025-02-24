@@ -14,6 +14,8 @@
             align-items: center;
             justify-content: center;
             padding: 40px 20px;
+            width: 100%;
+            margin: 0;
         }
 
         .login-container {
@@ -24,6 +26,7 @@
             max-width: 450px;
             border: 1px solid #363636;
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin: 0 auto;
         }
 
         .login-header {
@@ -126,38 +129,164 @@
             text-decoration: underline;
         }
 
-        .social-login {
-            margin-top: 30px;
-            text-align: center;
+        .signup-section {
+            margin-top: 20px;
         }
 
-        .social-login p {
-            color: #c4c4c4;
-            margin-bottom: 15px;
-        }
-
-        .social-icons {
+        /* Password strength indicator */
+        .password-strength {
+            margin-top: 5px;
+            height: 5px;
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            gap: 5px;
         }
 
-        .social-icons a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: #151515;
-            border: 1px solid #363636;
-            border-radius: 50%;
-            color: #ffffff;
-            transition: all 0.3s;
+        .strength-bar {
+            flex: 1;
+            height: 100%;
+            background: #363636;
+            transition: background 0.3s;
         }
 
-        .social-icons a:hover {
-            background: #71C946;
+        .strength-bar.weak { background: #ff4444; }
+        .strength-bar.medium { background: #ffbb33; }
+        .strength-bar.strong { background: #71C946; }
+
+        /* Form validation styles */
+        .form-group.error input {
+            border-color: #ff4444;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        /* Form transition animation */
+        .login-container > form,
+        .signup-section {
+            transition: all 0.3s ease;
+            opacity: 1;
+        }
+
+        .login-container > form.hide,
+        .signup-section.hide {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* Input focus effects */
+        .form-group input:focus {
             border-color: #71C946;
+            box-shadow: 0 0 0 2px rgba(113, 201, 70, 0.2);
+        }
+
+        /* Button hover animation */
+        .login-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: width 0.3s, height 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .login-button:hover:after {
+            width: 200%;
+            height: 200%;
+        }
+
+        /* Reset body margins and padding */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #151515;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Responsive styles using your existing breakpoints */
+        
+        /* Medium Device = 1200px */
+        @media only screen and (min-width: 992px) and (max-width: 1199px) {
+            .login-container {
+                max-width: 400px;
+                padding: 30px;
+            }
+        }
+
+        /* Tablet Device = 768px */
+        @media only screen and (min-width: 768px) and (max-width: 991px) {
+            .login-container {
+                max-width: 90%;
+                padding: 25px;
+            }
+
+            .login-section {
+                padding: 30px 15px;
+            }
+        }
+
+        /* Wide Mobile = 480px */
+        @media only screen and (max-width: 767px) {
+            .login-container {
+                max-width: 100%;
+                padding: 20px;
+                margin: 15px;
+            }
+
+            .login-section {
+                padding: 20px 10px;
+            }
+
+            .login-header h2 {
+                font-size: 24px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Small Device = 320px */
+        @media only screen and (max-width: 479px) {
+            .login-container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            .login-header h2 {
+                font-size: 20px;
+            }
+
+            .remember-forgot {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .form-group input {
+                padding: 8px 12px;
+            }
+
+            .login-button {
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -179,7 +308,14 @@
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" required 
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                    <div class="password-strength">
+                        <div class="strength-bar"></div>
+                        <div class="strength-bar"></div>
+                        <div class="strength-bar"></div>
+                    </div>
+                    <span class="error-message">Password must be at least 8 characters with letters and numbers</span>
                 </div>
 
                 <div class="remember-forgot">
@@ -191,18 +327,38 @@
                 </div>
 
                 <button type="submit" class="login-button">Login</button>
+
+                <div class="register-link">
+                    Don't have an account? <a href="#" onclick="toggleForms('signup')">Sign Up</a>
+                </div>
             </form>
 
-            <div class="register-link">
-                Don't have an account? <a href="register.html">Sign Up</a>
-            </div>
-
-            <div class="social-login">
-                <p>Or login with</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-google"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
+            <div class="signup-section" style="display: none;">
+                <div class="login-header">
+                    <h2>Create Account</h2>
+                    <p>Join our fitness community</p>
+                </div>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPhone">Phone Number</label>
+                        <input type="tel" id="signupPhone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="login-button">Sign Up</button>
+                </form>
+                <div class="register-link">
+                    Already have an account? <a href="#" onclick="toggleForms('login')">Login</a>
                 </div>
             </div>
         </div>
@@ -247,38 +403,104 @@
                 });
         });
 
-        // Handle social login
+        // Toggle between login and signup forms
+        function toggleForms(form) {
+            const loginSection = document.querySelector('.login-container > form');
+            const signupSection = document.querySelector('.signup-section');
+            const loginHeader = document.querySelector('.login-header');
+            const registerLink = document.querySelector('.register-link');
+
+            if (form === 'signup') {
+                loginSection.style.display = 'none';
+                signupSection.style.display = 'block';
+                loginHeader.style.display = 'none';
+                registerLink.style.display = 'none';
+            } else {
+                loginSection.style.display = 'block';
+                signupSection.style.display = 'none';
+                loginHeader.style.display = 'block';
+                registerLink.style.display = 'block';
+            }
+        }
+
+        // Handle signup form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+
+            // Create user with email and password
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Update profile with name
+                    return userCredential.user.updateProfile({
+                        displayName: name
+                    });
+                })
+                .then(() => {
+                    // Store additional user data in Firestore
+                    const user = firebase.auth().currentUser;
+                    return firebase.firestore().collection('users').doc(user.uid).set({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        createdAt: new Date()
+                    });
+                })
+                .then(() => {
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Signup failed: ' + error.message);
+                });
+        });
+
+        // Phone authentication
+        function phoneLogin() {
+            // Initialize phone auth
+            const phoneNumber = prompt('Please enter your phone number:');
+            if (!phoneNumber) return;
+
+            const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+                .then((confirmationResult) => {
+                    const code = prompt('Enter the verification code:');
+                    return confirmationResult.confirm(code);
+                })
+                .then(() => {
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Phone authentication failed: ' + error.message);
+                });
+        }
+
+        // Update the social login function
         function socialLogin(provider) {
             let authProvider;
             switch(provider) {
                 case 'google':
                     authProvider = new firebase.auth.GoogleAuthProvider();
                     break;
-                case 'facebook':
-                    authProvider = new firebase.auth.FacebookAuthProvider();
-                    break;
-                case 'twitter':
-                    authProvider = new firebase.auth.TwitterAuthProvider();
+                case 'apple':
+                    authProvider = new firebase.auth.OAuthProvider('apple.com');
                     break;
             }
 
             firebase.auth().signInWithPopup(authProvider)
                 .then((result) => {
-                    // Successfully logged in
                     window.location.href = 'dashboard.html';
                 })
                 .catch((error) => {
-                    // Handle errors
-                    alert('Error: ' + error.message);
+                    console.error('Error:', error);
+                    alert('Login failed: ' + error.message);
                 });
         }
-
-        // Update social login buttons
-        document.querySelector('.social-icons').innerHTML = `
-            <a href="#" onclick="socialLogin('google')"><i class="fab fa-google"></i></a>
-            <a href="#" onclick="socialLogin('facebook')"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" onclick="socialLogin('twitter')"><i class="fab fa-twitter"></i></a>
-        `;
 
         // Check if user is already logged in
         firebase.auth().onAuthStateChanged((user) => {
@@ -287,6 +509,128 @@
                 window.location.href = 'dashboard.html';
             }
         });
+
+        // Form validation
+        function validateForm(formId) {
+            const form = document.getElementById(formId);
+            const inputs = form.querySelectorAll('input');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                const group = input.closest('.form-group');
+                group.classList.remove('error');
+
+                if (input.type === 'email') {
+                    if (!validateEmail(input.value)) {
+                        group.classList.add('error');
+                        isValid = false;
+                    }
+                }
+
+                if (input.type === 'password') {
+                    if (!validatePassword(input.value)) {
+                        group.classList.add('error');
+                        isValid = false;
+                    }
+                }
+
+                if (input.type === 'tel') {
+                    if (!validatePhone(input.value)) {
+                        group.classList.add('error');
+                        isValid = false;
+                    }
+                }
+
+                if (input.required && !input.value.trim()) {
+                    group.classList.add('error');
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        // Email validation
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Password validation and strength
+        function validatePassword(password) {
+            return password.length >= 8 && /[A-Za-z]/.test(password) && /\d/.test(password);
+        }
+
+        function checkPasswordStrength(password) {
+            const strengthBars = document.querySelectorAll('.strength-bar');
+            strengthBars.forEach(bar => bar.className = 'strength-bar');
+
+            if (password.length >= 8) {
+                strengthBars[0].classList.add('weak');
+                if (/[A-Za-z]/.test(password) && /\d/.test(password)) {
+                    strengthBars[1].classList.add('medium');
+                    if (/[!@#$%^&*]/.test(password)) {
+                        strengthBars[2].classList.add('strong');
+                    }
+                }
+            }
+        }
+
+        // Phone validation
+        function validatePhone(phone) {
+            return /^\+?[\d\s-]{10,}$/.test(phone);
+        }
+
+        // Add event listeners
+        document.querySelectorAll('input[type="password"]').forEach(input => {
+            input.addEventListener('input', (e) => checkPasswordStrength(e.target.value));
+        });
+
+        // Update form submission handlers
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm('loginForm')) {
+                // Existing login code...
+            }
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm('signupForm')) {
+                // Existing signup code...
+            }
+        });
+
+        // Smooth form toggle
+        function toggleForms(form) {
+            const loginSection = document.querySelector('.login-container > form');
+            const signupSection = document.querySelector('.signup-section');
+            const loginHeader = document.querySelector('.login-header');
+
+            if (form === 'signup') {
+                loginSection.classList.add('hide');
+                loginHeader.classList.add('hide');
+                setTimeout(() => {
+                    loginSection.style.display = 'none';
+                    loginHeader.style.display = 'none';
+                    signupSection.style.display = 'block';
+                    setTimeout(() => signupSection.classList.remove('hide'), 50);
+                }, 300);
+            } else {
+                signupSection.classList.add('hide');
+                setTimeout(() => {
+                    signupSection.style.display = 'none';
+                    loginSection.style.display = 'block';
+                    loginHeader.style.display = 'block';
+                    setTimeout(() => {
+                        loginSection.classList.remove('hide');
+                        loginHeader.classList.remove('hide');
+                    }, 50);
+                }, 300);
+            }
+        }
     </script>
+
+    <!-- Add recaptcha container for phone auth -->
+    <div id="recaptcha-container"></div>
 </body>
 </html> 
