@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - The Muscle Studio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .login-section {
+            background: #151515;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-container {
+            background: #0a0a0a;
+            border-radius: 10px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid #363636;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            color: #ffffff;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #c4c4c4;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #151515;
+            border: 1px solid #363636;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            border-color: #71C946;
+            outline: none;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            color: #c4c4c4;
+        }
+
+        .remember-me input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .forgot-password {
+            color: #71C946;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: #71C946;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-button:hover {
+            background: #5ba338;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #c4c4c4;
+        }
+
+        .register-link a {
+            color: #71C946;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .social-login {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .social-login p {
+            color: #c4c4c4;
+            margin-bottom: 15px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #151515;
+            border: 1px solid #363636;
+            border-radius: 50%;
+            color: #ffffff;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: #71C946;
+            border-color: #71C946;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include your existing header/navigation here -->
+
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Login to access your dashboard</p>
+            </div>
+
+            <form action="dashboard.html" method="POST" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember">
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-button">Login</button>
+            </form>
+
+            <div class="register-link">
+                Don't have an account? <a href="register.html">Sign Up</a>
+            </div>
+
+            <div class="social-login">
+                <p>Or login with</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-google"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8HwlXcTf5iWOSmTDqUAvjrbLjZWXrCPA",
+            authDomain: "loginapp-8d0ac.firebaseapp.com",
+            projectId: "loginapp-8d0ac",
+            storageBucket: "loginapp-8d0ac.firebasestorage.app",
+            messagingSenderId: "81023835707",
+            appId: "1:81023835707:web:e71e35329a3f8bbdc7861e",
+            measurementId: "G-T3GBTYMG95"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Sign in with email and password
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed in successfully
+                    const user = userCredential.user;
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    // Handle errors
+                    alert('Error: ' + error.message);
+                });
+        });
+
+        // Handle social login
+        function socialLogin(provider) {
+            let authProvider;
+            switch(provider) {
+                case 'google':
+                    authProvider = new firebase.auth.GoogleAuthProvider();
+                    break;
+                case 'facebook':
+                    authProvider = new firebase.auth.FacebookAuthProvider();
+                    break;
+                case 'twitter':
+                    authProvider = new firebase.auth.TwitterAuthProvider();
+                    break;
+            }
+
+            firebase.auth().signInWithPopup(authProvider)
+                .then((result) => {
+                    // Successfully logged in
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    // Handle errors
+                    alert('Error: ' + error.message);
+                });
+        }
+
+        // Update social login buttons
+        document.querySelector('.social-icons').innerHTML = `
+            <a href="#" onclick="socialLogin('google')"><i class="fab fa-google"></i></a>
+            <a href="#" onclick="socialLogin('facebook')"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" onclick="socialLogin('twitter')"><i class="fab fa-twitter"></i></a>
+        `;
+
+        // Check if user is already logged in
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html> 

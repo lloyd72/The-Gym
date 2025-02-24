@@ -11,6 +11,12 @@
             max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
+            color: #ffffff;
+        }
+
+        .dashboard-container h1 {
+            color: #ffffff;
+            margin-bottom: 30px;
         }
 
         .dashboard-grid {
@@ -21,10 +27,11 @@
         }
 
         .dashboard-card {
-            background: #fff;
+            background: #0a0a0a;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #363636;
         }
 
         .card-header {
@@ -32,31 +39,31 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #363636;
             padding-bottom: 10px;
         }
 
         .card-header h3 {
-            color: #333;
+            color: #ffffff;
             margin: 0;
         }
 
         .card-header i {
-            color: #ff2625;
+            color: #71C946;
             font-size: 1.5em;
         }
 
         .progress-bar {
             width: 100%;
             height: 10px;
-            background: #f0f0f0;
+            background: #363636;
             border-radius: 5px;
             margin: 10px 0;
         }
 
         .progress {
             height: 100%;
-            background: #ff2625;
+            background: #71C946;
             border-radius: 5px;
             transition: width 0.3s ease;
         }
@@ -65,16 +72,26 @@
             display: inline-block;
             padding: 5px 10px;
             border-radius: 15px;
-            background: #4CAF50;
+            background: #71C946;
             color: white;
             font-size: 0.9em;
         }
 
         .upcoming-class {
-            border-left: 4px solid #ff2625;
+            border-left: 4px solid #71C946;
             padding: 10px;
             margin: 10px 0;
-            background: #f9f9f9;
+            background: #151515;
+        }
+
+        .upcoming-class h4 {
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .upcoming-class p {
+            color: #c4c4c4;
+            margin: 5px 0;
         }
 
         .workout-plan, .diet-plan {
@@ -82,20 +99,31 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #363636;
+        }
+
+        .workout-plan h4, .diet-plan h4 {
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .workout-plan p, .diet-plan p {
+            color: #c4c4c4;
+            margin: 0;
         }
 
         .download-btn {
-            background: #ff2625;
+            background: #71C946;
             color: white;
             padding: 5px 15px;
             border-radius: 5px;
             text-decoration: none;
             font-size: 0.9em;
+            transition: all 0.3s;
         }
 
         .download-btn:hover {
-            background: #e60f0f;
+            background: #5ba338;
         }
 
         .stats-grid {
@@ -107,20 +135,97 @@
         .stat-item {
             text-align: center;
             padding: 10px;
-            background: #f9f9f9;
+            background: #151515;
             border-radius: 5px;
+            border: 1px solid #363636;
         }
 
         .stat-number {
             font-size: 1.5em;
-            color: #ff2625;
+            color: #71C946;
             font-weight: bold;
+        }
+
+        .stat-item div:last-child {
+            color: #c4c4c4;
+            margin-top: 5px;
+        }
+
+        body {
+            background: #151515;
         }
 
         @media (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
+        }
+
+        .workout-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #363636;
+        }
+
+        .workout-form h4 {
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .workout-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #151515;
+            border: 1px solid #363636;
+            border-radius: 5px;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .workout-input:focus {
+            border-color: #71C946;
+            outline: none;
+        }
+
+        .log-workout-btn {
+            width: 100%;
+            padding: 10px;
+            background: #71C946;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .log-workout-btn:hover {
+            background: #5ba338;
+        }
+
+        .workout-goals {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #363636;
+        }
+
+        .workout-goals h4 {
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .goal-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .goal-progress {
+            margin-top: 15px;
+        }
+
+        .goal-text {
+            color: #c4c4c4;
         }
     </style>
 </head>
@@ -151,20 +256,37 @@
                 </div>
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <div class="stat-number">12</div>
+                        <div class="stat-number" data-stat="workouts">0</div>
                         <div>Workouts</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">24h</div>
+                        <div class="stat-number" data-stat="hours">0h</div>
                         <div>Total Time</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">80%</div>
+                        <div class="stat-number" data-stat="progress">0%</div>
                         <div>Goal Progress</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">5</div>
+                        <div class="stat-number" data-stat="achievements">0</div>
                         <div>Achievements</div>
+                    </div>
+                </div>
+                <div class="workout-goals">
+                    <h4>Workout Goals</h4>
+                    <div class="goal-form">
+                        <select id="goalType" class="workout-input">
+                            <option value="weekly">Weekly Goal</option>
+                            <option value="monthly">Monthly Goal</option>
+                        </select>
+                        <input type="number" id="goalHours" class="workout-input" placeholder="Target hours" min="1" max="100">
+                        <button onclick="setWorkoutGoal()" class="log-workout-btn">Set Goal</button>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 0%"></div>
+                        </div>
+                        <p class="goal-text">0 of 0 hours completed</p>
                     </div>
                 </div>
             </div>
@@ -224,6 +346,280 @@
             const progress = document.querySelector('.progress');
             if(progress) {
                 progress.style.width = '80%'; // Example progress
+            }
+        }
+    </script>
+
+    <!-- Replace the existing Firebase scripts with these -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8HwlXcTf5iWOSmTDqUAvjrbLjZWXrCPA",
+            authDomain: "loginapp-8d0ac.firebaseapp.com",
+            projectId: "loginapp-8d0ac",
+            storageBucket: "loginapp-8d0ac.firebasestorage.app",
+            messagingSenderId: "81023835707",
+            appId: "1:81023835707:web:e71e35329a3f8bbdc7861e",
+            measurementId: "G-T3GBTYMG95"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Check authentication state
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                // No user is signed in, redirect to login
+                window.location.href = 'login.html';
+            } else {
+                // Update welcome message with user's name or email
+                document.querySelector('h1').textContent = `Welcome back, ${user.displayName || user.email}!`;
+            }
+        });
+
+        // Add logout functionality
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch((error) => {
+                console.error('Error signing out:', error);
+            });
+        }
+    </script>
+
+    <!-- Add a logout button to your dashboard -->
+    <button onclick="logout()" class="logout-button">Logout</button>
+
+    <script>
+        // Initialize Firestore
+        const db = firebase.firestore();
+
+        // Function to update workout progress
+        async function updateWorkoutProgress(userId) {
+            try {
+                const workoutDoc = await db.collection('workouts').doc(userId).get();
+                const workoutData = workoutDoc.data() || {
+                    totalWorkouts: 0,
+                    totalHours: 0,
+                    weeklyGoal: 0,
+                    monthlyGoal: 0,
+                    achievements: 0,
+                    lastUpdated: new Date()
+                };
+
+                // Calculate progress based on goals
+                const now = new Date();
+                let progress = 0;
+                let goalText = '';
+
+                if (workoutData.weeklyGoal) {
+                    const weekStart = new Date(workoutData.weeklyStart);
+                    const weeklyHours = await calculateHoursSince(userId, weekStart);
+                    progress = (weeklyHours / workoutData.weeklyGoal) * 100;
+                    goalText = `${weeklyHours} of ${workoutData.weeklyGoal} weekly hours`;
+                } else if (workoutData.monthlyGoal) {
+                    const monthStart = new Date(workoutData.monthlyStart);
+                    const monthlyHours = await calculateHoursSince(userId, monthStart);
+                    progress = (monthlyHours / workoutData.monthlyGoal) * 100;
+                    goalText = `${monthlyHours} of ${workoutData.monthlyGoal} monthly hours`;
+                }
+
+                // Update UI
+                document.querySelector('[data-stat="workouts"]').textContent = workoutData.totalWorkouts || 0;
+                document.querySelector('[data-stat="hours"]').textContent = `${workoutData.totalHours || 0}h`;
+                document.querySelector('[data-stat="progress"]').textContent = `${Math.min(100, Math.round(progress))}%`;
+                document.querySelector('[data-stat="achievements"]').textContent = workoutData.achievements || 0;
+                
+                // Update progress bar
+                const progressBar = document.querySelector('.progress');
+                if (progressBar) {
+                    progressBar.style.width = `${Math.min(100, progress)}%`;
+                }
+                
+                // Update goal text
+                const goalTextElement = document.querySelector('.goal-text');
+                if (goalTextElement) {
+                    goalTextElement.textContent = goalText || 'No active goal';
+                }
+
+            } catch (error) {
+                console.error('Error updating progress:', error);
+            }
+        }
+
+        async function calculateHoursSince(userId, startDate) {
+            try {
+                const logs = await db.collection('users').doc(userId)
+                    .collection('workout-logs')
+                    .where('timestamp', '>=', startDate)
+                    .get();
+                
+                return logs.docs.reduce((total, doc) => total + doc.data().duration, 0);
+            } catch (error) {
+                console.error('Error calculating hours:', error);
+                return 0;
+            }
+        }
+
+        // Add achievement checking
+        async function checkAchievements(userId, workoutData) {
+            const achievements = [];
+            
+            if (workoutData.totalWorkouts >= 10) achievements.push('10 Workouts Completed');
+            if (workoutData.totalWorkouts >= 50) achievements.push('50 Workouts Completed');
+            if (workoutData.totalHours >= 20) achievements.push('20 Hours of Training');
+            if (workoutData.totalHours >= 100) achievements.push('100 Hours of Training');
+
+            try {
+                await db.collection('workouts').doc(userId).set({
+                    achievements: achievements.length,
+                    achievementsList: achievements,
+                    lastUpdated: new Date()
+                }, { merge: true });
+            } catch (error) {
+                console.error('Error updating achievements:', error);
+            }
+        }
+
+        // Function to log a new workout
+        async function logWorkout(userId, duration, type) {
+            try {
+                const workoutRef = db.collection('workouts').doc(userId);
+                const userWorkoutsRef = db.collection('users').doc(userId).collection('workout-logs');
+
+                // Add the individual workout log
+                await userWorkoutsRef.add({
+                    type: type,
+                    duration: duration,
+                    timestamp: new Date()
+                });
+
+                // Get current stats
+                const workoutDoc = await workoutRef.get();
+                const currentData = workoutDoc.data() || {
+                    totalWorkouts: 0,
+                    totalHours: 0
+                };
+
+                // Update the overall stats
+                const newData = {
+                    totalWorkouts: currentData.totalWorkouts + 1,
+                    totalHours: currentData.totalHours + duration,
+                    lastUpdated: new Date()
+                };
+
+                await workoutRef.set(newData, { merge: true });
+
+                // Check for achievements
+                await checkAchievements(userId, newData);
+
+                // Refresh the display
+                updateWorkoutProgress(userId);
+
+                // Show success message
+                alert('Workout logged successfully!');
+            } catch (error) {
+                console.error('Error logging workout:', error);
+                alert('Error logging workout. Please try again.');
+            }
+        }
+
+        // Update the Workout Progress card HTML
+        const workoutCard = document.querySelector('.dashboard-card:nth-child(2)');
+        workoutCard.innerHTML = `
+            <div class="card-header">
+                <h3>Workout Progress</h3>
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-stat="workouts">0</div>
+                    <div>Workouts</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-stat="hours">0h</div>
+                    <div>Total Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-stat="progress">0%</div>
+                    <div>Goal Progress</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-stat="achievements">0</div>
+                    <div>Achievements</div>
+                </div>
+            </div>
+            <div class="workout-goals">
+                <h4>Workout Goals</h4>
+                <div class="goal-form">
+                    <select id="goalType" class="workout-input">
+                        <option value="weekly">Weekly Goal</option>
+                        <option value="monthly">Monthly Goal</option>
+                    </select>
+                    <input type="number" id="goalHours" class="workout-input" placeholder="Target hours" min="1" max="100">
+                    <button onclick="setWorkoutGoal()" class="log-workout-btn">Set Goal</button>
+                </div>
+                <div class="goal-progress">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 0%"></div>
+                    </div>
+                    <p class="goal-text">0 of 0 hours completed</p>
+                </div>
+            </div>
+        `;
+
+        // Function to log a new workout from the form
+        function logNewWorkout() {
+            const type = document.getElementById('workoutType').value;
+            const duration = parseFloat(document.getElementById('workoutDuration').value);
+            
+            if (duration && duration > 0) {
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        logWorkout(user.uid, duration, type);
+                    }
+                });
+            } else {
+                alert('Please enter a valid duration');
+            }
+        }
+
+        // Update progress when user is authenticated
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                updateWorkoutProgress(user.uid);
+            }
+        });
+    </script>
+
+    <script>
+        // Add these functions to your existing script
+        async function setWorkoutGoal() {
+            const goalType = document.getElementById('goalType').value;
+            const goalHours = parseFloat(document.getElementById('goalHours').value);
+            
+            if (goalHours && goalHours > 0) {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    try {
+                        await db.collection('workouts').doc(user.uid).set({
+                            [`${goalType}Goal`]: goalHours,
+                            [`${goalType}Start`]: new Date(),
+                            lastUpdated: new Date()
+                        }, { merge: true });
+                        
+                        updateWorkoutProgress(user.uid);
+                    } catch (error) {
+                        console.error('Error setting goal:', error);
+                        alert('Error setting goal. Please try again.');
+                    }
+                }
+            } else {
+                alert('Please enter a valid goal');
             }
         }
     </script>
