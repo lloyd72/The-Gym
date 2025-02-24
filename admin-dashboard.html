@@ -139,7 +139,9 @@
         // Load members
         async function loadMembers() {
             try {
-                const membersRef = firebase.firestore().collection('users');
+                console.log('Loading members...');
+                const db = firebase.firestore();
+                const membersRef = db.collection('users');
                 const snapshot = await membersRef.get();
                 
                 console.log('Found members:', snapshot.size);
@@ -147,11 +149,16 @@
                 const tableBody = document.getElementById('membersTableBody');
                 tableBody.innerHTML = '';
 
+                if (snapshot.empty) {
+                    tableBody.innerHTML = '<tr><td colspan="7">No members found</td></tr>';
+                    return;
+                }
+
                 snapshot.forEach(doc => {
                     const member = doc.data();
-                    console.log('Member:', member);
+                    console.log('Member data:', member);
                     
-                    const row = `
+                    tableBody.innerHTML += `
                         <tr>
                             <td>${member.name || 'N/A'}</td>
                             <td>${member.email || 'N/A'}</td>
@@ -169,10 +176,10 @@
                             </td>
                         </tr>
                     `;
-                    tableBody.innerHTML += row;
                 });
             } catch (error) {
                 console.error('Error loading members:', error);
+                console.log('Full error:', error);
             }
         }
 
