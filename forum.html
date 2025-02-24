@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Forum - Discuss & Share</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .forum-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .forum-post {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+
+        .post-content {
+            margin-bottom: 20px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 20px;
+            color: #666;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .comments-section {
+            margin-top: 15px;
+            padding-left: 20px;
+            border-left: 2px solid #eee;
+        }
+
+        .create-post {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .post-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            background: #ff2625;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #e60f0f;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include your existing header/navigation here -->
+
+    <div class="forum-container">
+        <h1>Gym Community Forum</h1>
+        
+        <!-- Create Post Section -->
+        <div class="create-post">
+            <h3>Create a New Post</h3>
+            <textarea class="post-input" placeholder="Share your thoughts, questions, or tips..."></textarea>
+            <button class="submit-button">Post</button>
+        </div>
+
+        <!-- Forum Posts -->
+        <div class="forum-posts">
+            <!-- Sample Post -->
+            <div class="forum-post">
+                <div class="post-header">
+                    <div class="user-info">
+                        <div class="user-avatar"></div>
+                        <div>
+                            <h4>John Doe</h4>
+                            <small>Posted 2 hours ago</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>What's your favorite post-workout meal? I'm looking for new ideas to improve my recovery routine.</p>
+                </div>
+                <div class="post-actions">
+                    <div class="action-button">
+                        <i class="fas fa-heart"></i>
+                        <span>24 Likes</span>
+                    </div>
+                    <div class="action-button">
+                        <i class="fas fa-comment"></i>
+                        <span>12 Comments</span>
+                    </div>
+                </div>
+                <div class="comments-section">
+                    <div class="forum-post">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <div class="user-avatar"></div>
+                                <div>
+                                    <h4>Jane Smith</h4>
+                                    <small>Posted 1 hour ago</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>I usually go for a protein shake with banana and peanut butter. Works great for me!</p>
+                        </div>
+                        <div class="post-actions">
+                            <div class="action-button">
+                                <i class="fas fa-heart"></i>
+                                <span>8 Likes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more posts here -->
+        </div>
+    </div>
+
+    <!-- Include your existing footer here -->
+
+    <script>
+        // Basic functionality for likes
+        document.querySelectorAll('.fa-heart').forEach(heart => {
+            heart.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const likesCount = this.nextElementSibling;
+                let currentLikes = parseInt(likesCount.textContent);
+                if(this.classList.contains('active')) {
+                    likesCount.textContent = `${currentLikes + 1} Likes`;
+                } else {
+                    likesCount.textContent = `${currentLikes - 1} Likes`;
+                }
+            });
+        });
+
+        // Basic functionality for posting
+        const postInput = document.querySelector('.post-input');
+        const submitButton = document.querySelector('.submit-button');
+        const forumPosts = document.querySelector('.forum-posts');
+
+        submitButton.addEventListener('click', function() {
+            if(postInput.value.trim() !== '') {
+                const newPost = createNewPost(postInput.value);
+                forumPosts.insertBefore(newPost, forumPosts.firstChild);
+                postInput.value = '';
+            }
+        });
+
+        function createNewPost(content) {
+            const post = document.createElement('div');
+            post.className = 'forum-post';
+            post.innerHTML = `
+                <div class="post-header">
+                    <div class="user-info">
+                        <div class="user-avatar"></div>
+                        <div>
+                            <h4>You</h4>
+                            <small>Just now</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>${content}</p>
+                </div>
+                <div class="post-actions">
+                    <div class="action-button">
+                        <i class="fas fa-heart"></i>
+                        <span>0 Likes</span>
+                    </div>
+                    <div class="action-button">
+                        <i class="fas fa-comment"></i>
+                        <span>0 Comments</span>
+                    </div>
+                </div>
+                <div class="comments-section"></div>
+            `;
+            return post;
+        }
+    </script>
+</body>
+</html> 
