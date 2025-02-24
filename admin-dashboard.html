@@ -71,11 +71,35 @@
             color: white;
             margin-bottom: 20px;
         }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            background: #ff4444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #cc0000;
+        }
     </style>
 </head>
 <body>
     <div class="admin-container">
-        <h1>Membership Management</h1>
+        <div class="admin-header">
+            <h1>Membership Management</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
         
         <input type="text" class="search-bar" id="memberSearch" placeholder="Search members...">
         
@@ -222,6 +246,15 @@
 
         // Remove the DOMContentLoaded event listener since we're loading members after admin verification
         document.removeEventListener('DOMContentLoaded', loadMembers);
+
+        // Add this logout function
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.replace('index.html'); // Redirect to index.html
+            }).catch((error) => {
+                console.error('Logout error:', error);
+            });
+        }
     </script>
 </body>
 </html> 
